@@ -11,10 +11,11 @@ const AllAppsPage = () => {
   const [currentPage, setCurrentpage] = useState(0);
   const [sort, setSort] = useState('');
   const [order, setOder] = useState('');
+  const [searchText, setSearchtext] = useState('');
   const limit = 10;
 
   useEffect(() => {
-    fetch(`http://localhost:5000/allapps?limit=10&skip=${currentPage * limit}&sort==${sort}&order=$${order}`)
+    fetch(`http://localhost:5000/allapps?limit=10&skip=${currentPage * limit}&sort=${sort}&order=${order}&search=${searchText}`)
       .then((res) => res.json())
       .then((data) => {
         setApps(data.apps)
@@ -25,13 +26,17 @@ const AllAppsPage = () => {
       .catch((error) => {
         console.log(error);
       })
-  }, [currentPage, sort, order])
+  }, [currentPage, sort, order, searchText])
 
   const handleSelect = (event) => {
     event.preventDefault();
     const sortText = event.target.value;
     setSort(sortText.split('-')[0])
     setOder(sortText.split('-')[1]);
+  }
+  const handleSearchChange = (event) => {
+    event.preventDefault();
+    setSearchtext(event.target.value);
   }
   return (
     <div>
@@ -55,7 +60,9 @@ const AllAppsPage = () => {
         </div>
 
         <form>
-          <label className="input max-w-[300px] w-[300px] input-secondary">
+          <label
+            htmlFor="search"
+            className="input max-w-[300px] w-[300px] input-secondary">
             <svg
               className="h-[1em] opacity-50"
               xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +79,12 @@ const AllAppsPage = () => {
                 <path d="m21 21-4.3-4.3"></path>
               </g>
             </svg>
-            <input type="search" className="" placeholder="Search Apps" />
+            <input
+              onChange={handleSearchChange}
+              name="search"
+              type="search"
+              className=""
+              placeholder="Search Apps" />
           </label>
         </form>
 
@@ -80,8 +92,8 @@ const AllAppsPage = () => {
           <select
             onChange={handleSelect}
             className="select bg-white">
-            <option selected disabled={true}>
-              Sort by <span className="text-xs">R / S / D</span>
+            <option value={''} disabled={true}>
+              Sort by  / S / D
             </option>
             <option value={"rating-desc"}>Ratings : High - Low</option>
             <option value={"rating-asc"}>Ratings : Low - High</option>
@@ -104,7 +116,7 @@ const AllAppsPage = () => {
               <button className="btn btn-primary">Show All Apps</button>
             </div>
           ) : (
-            apps.map((app) => <AppCard key={app.id} app={app}></AppCard>)
+            apps.map((app) => <AppCard key={app._id} app={app}></AppCard>)
           )}
         </div>
       </>
