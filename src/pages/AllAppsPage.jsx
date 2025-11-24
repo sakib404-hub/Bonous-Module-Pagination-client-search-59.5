@@ -99,9 +99,19 @@ const AllAppsPage = () => {
       </>
       <div className="flex justify-center items-center flex-wrap my-10">
         {
+          currentPage > 0 && <button
+            className="btn"
+            onClick={() => setCurrentpage(currentPage - 1)}>Prev</button>
+        }
+        {
           [...Array(totalPage).keys()].map(i => <button
             onClick={() => { setCurrentpage(i) }}
-            className="btn">{i}</button>)
+            className={`btn ${i === currentPage && 'btn-primary'}`}>{i + 1}</button>)
+        }
+        {
+          currentPage < totalPage - 1 && <button
+            onClick={() => setCurrentpage(currentPage + 1)}
+            className="btn">Next</button>
         }
       </div>
     </div>
