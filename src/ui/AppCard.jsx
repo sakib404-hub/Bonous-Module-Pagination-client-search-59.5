@@ -7,13 +7,13 @@ const AppCard = ({ app }) => {
   const {
     image,
     title,
-    // rating,
+    rating,
     // companyName,
     _id,
     // description,
     // size,
     // reviews,
-    ratingAvg,
+    // ratingAvg,
     // ratings,
     downloads,
   } = app;
@@ -37,7 +37,7 @@ const AppCard = ({ app }) => {
           <GrDownload></GrDownload> {downloads}
         </div>
         <div className="badge badge-soft badge-secondary">
-          <FaStar></FaStar> {ratingAvg}
+          <FaStar></FaStar> {rating}
         </div>
       </div>
     </Link>

@@ -9,10 +9,12 @@ const AllAppsPage = () => {
   const [totalApps, setTotalApps] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentpage] = useState(0);
+  const [sort, setSort] = useState('');
+  const [order, setOder] = useState('');
   const limit = 10;
 
   useEffect(() => {
-    fetch(`http://localhost:5000/apps?limit=10&skip=${currentPage * limit}`)
+    fetch(`http://localhost:5000/allapps?limit=10&skip=${currentPage * limit}&sort==${sort}&order=$${order}`)
       .then((res) => res.json())
       .then((data) => {
         setApps(data.apps)
@@ -23,7 +25,14 @@ const AllAppsPage = () => {
       .catch((error) => {
         console.log(error);
       })
-  }, [currentPage])
+  }, [currentPage, sort, order])
+
+  const handleSelect = (event) => {
+    event.preventDefault();
+    const sortText = event.target.value;
+    setSort(sortText.split('-')[0])
+    setOder(sortText.split('-')[1]);
+  }
   return (
     <div>
       <title>All Apps | Hero Apps</title>
@@ -68,7 +77,9 @@ const AllAppsPage = () => {
         </form>
 
         <div className="">
-          <select className="select bg-white">
+          <select
+            onChange={handleSelect}
+            className="select bg-white">
             <option selected disabled={true}>
               Sort by <span className="text-xs">R / S / D</span>
             </option>
@@ -104,7 +115,8 @@ const AllAppsPage = () => {
             onClick={() => setCurrentpage(currentPage - 1)}>Prev</button>
         }
         {
-          [...Array(totalPage).keys()].map(i => <button
+          [...Array(totalPage).keys()].map((i) => <button
+            key={i}
             onClick={() => { setCurrentpage(i) }}
             className={`btn ${i === currentPage && 'btn-primary'}`}>{i + 1}</button>)
         }
